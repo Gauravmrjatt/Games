@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <div class="md:flex md:items-center md:justify-between mb-8">
+        <div class="flex-1 min-w-0">
+            <h2 class="text-2xl font-bold leading-7 text-white sm:text-3xl sm:truncate">
+                Admin Dashboard
+            </h2>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <!-- Add New Game -->
+        <div class="bg-gray-800 shadow sm:rounded-lg border border-gray-700">
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg leading-6 font-medium text-white mb-4">
+                    Add New Game
+                </h3>
+                <form action="" method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="space-y-4">
+                        <div>
+                            <label for="title" class="block text-sm font-medium text-gray-300">Title</label>
+                            <div class="mt-1">
+                                {{ form.title(class="appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-700 text-white") }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="slug" class="block text-sm font-medium text-gray-300">Slug</label>
+                            <div class="mt-1">
+                                {{ form.slug(class="appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-700 text-white") }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="script_file" class="block text-sm font-medium text-gray-300">Script Filename</label>
+                            <div class="mt-1">
+                                {{ form.script_file(class="appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-700 text-white") }}
+                                <p class="mt-1 text-xs text-gray-500">File must exist in static/games/</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="description" class="block text-sm font-medium text-gray-300">Description</label>
+                            <div class="mt-1">
+                                {{ form.description(class="appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-700 text-white", rows="3") }}
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            {{ form.submit(class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500") }}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Manage Games -->
+        <div class="bg-gray-800 shadow sm:rounded-lg border border-gray-700">
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg leading-6 font-medium text-white mb-4">
+                    Existing Games
+                </h3>
+                <ul class="divide-y divide-gray-700">
+                    {% for game in games %}
+                    <li class="py-4 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-white">{{ game.title }}</p>
+                            <p class="text-sm text-gray-500">{{ game.slug }}</p>
+                        </div>
+                        <form action="{{ url_for('delete_game', game_id=game.id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
+                            <button type="submit" class="text-red-400 hover:text-red-300 text-sm font-medium">Delete</button>
+                        </form>
+                    </li>
+                    {% else %}
+                    <li class="py-4 text-gray-500">No games found.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
