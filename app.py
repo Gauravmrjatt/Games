@@ -7,8 +7,12 @@ from sqlalchemy import func
 import os
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245' # Should be env var in prod
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', '5791628bb0b13ce0c676dfde280ba245')
+
+uri = os.environ.get('DATABASE_URL', 'sqlite:///site.db')
+if uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = uri
 db.init_app(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
